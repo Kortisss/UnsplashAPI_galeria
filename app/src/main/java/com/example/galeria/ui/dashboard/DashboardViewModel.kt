@@ -1,13 +1,14 @@
 package com.example.galeria.ui.dashboard
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import com.example.galeria.data.StoreImageUrlsDao
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class DashboardViewModel : ViewModel() {
-
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is dashboard Fragment"
-    }
-    val text: LiveData<String> = _text
+@HiltViewModel
+class DashboardViewModel @Inject constructor(
+    imageDao: StoreImageUrlsDao
+) : ViewModel() {
+    val image = imageDao.getImages().asLiveData()
 }

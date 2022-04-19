@@ -1,29 +1,31 @@
 package com.example.galeria.ui.home
-
+import android.content.Context.VIBRATOR_SERVICE
+import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
-import com.example.galeria.models.RandomImageModel.Image
 import com.example.galeria.databinding.FragmentHomeBinding
+import com.example.galeria.models.randomImageModel.Image
+import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.HttpException
 import java.io.IOException
 
 const val TAG = "HomeFragment"
-
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
-    private val client_id = "zxQxVwX0NyRLHKKXGXyNiXIQzY0Q2iT6esxgxi2MJOo"
+    private val clientId = "zxQxVwX0NyRLHKKXGXyNiXIQzY0Q2iT6esxgxi2MJOo"
     private var _binding: FragmentHomeBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -31,17 +33,13 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
+            ViewModelProvider(this)[HomeViewModel::class.java]
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        /*
-        val textView: TextView = binding.textHome
-        homeViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
-        */
+
         if (!homeViewModel.getURL().value.isNullOrEmpty()) {
             binding.imageToLoad.visibility = View.VISIBLE
             Glide
@@ -50,13 +48,22 @@ class HomeFragment : Fragment() {
                 .centerCrop()
                 .into(binding.imageToLoad)
         }
-
-        binding.btnGenerateImage.setOnClickListener(){
+        binding.imageToLoad.setOnLongClickListener{
+            Toast.makeText(it.context, "Long click detected", Toast.LENGTH_SHORT).show()
+            vibratePhone()
+            homeViewModel.getObj().value?.let { it1 ->
+                ImageLongClickDialogFragment(it1).show(
+                    childFragmentManager, ImageLongClickDialogFragment.TAG)
+            }
+            registerForContextMenu(binding.imageToLoad)
+            return@setOnLongClickListener true
+        }
+        binding.btnGenerateImage.setOnClickListener {
             lifecycleScope.launchWhenCreated {
                 binding.progressBar.isVisible = true
                 binding.imageToLoad.visibility = View.VISIBLE
                 val response = try {
-                    RetrofitInstance.API.getRandomImage(client_id)
+                    RetrofitInstance.API.getRandomImage(clientId)
                 } catch (e: IOException) {
                     Log.e(TAG, "IOException, you might not have internet connection")
                     binding.progressBar.isVisible = false
@@ -66,19 +73,15 @@ class HomeFragment : Fragment() {
                     binding.progressBar.isVisible = false
                     return@launchWhenCreated
                 }
-
                 if (response.isSuccessful && response.body() != null){
                     val myClass: Image = response.body()!!
                     homeViewModel.setURL(myClass.urls.regular)
+                    homeViewModel.setObj(myClass)
                     Glide
                         .with(requireContext())
                         .load(myClass.urls.regular)
                         .centerCrop()
                         .into(binding.imageToLoad)
-
-                    //var json = JSONObject(response.body()) // toString() is not the response body, it is a debug representation of the response body
-                    //var status = json.getString("raw")
-                    //Log.e(TAG, status)
                 } else {
                     Log.e(TAG, "Response not successful")
                     Log.e(TAG, response.toString())
@@ -86,12 +89,19 @@ class HomeFragment : Fragment() {
                 binding.progressBar.isVisible = false
             }
         }
-
         return root
     }
-
+    private fun Fragment.vibratePhone() {
+        val vibrator = requireContext().getSystemService(VIBRATOR_SERVICE) as Vibrator
+        if (Build.VERSION.SDK_INT >= 26) {
+            vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
+        } else {
+            vibrator.vibrate(200)
+        }
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
 }

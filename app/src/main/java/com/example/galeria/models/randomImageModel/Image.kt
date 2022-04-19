@@ -1,4 +1,4 @@
-package com.example.galeria.models.RandomImageModel
+package com.example.galeria.models.randomImageModel
 
 data class Image(
     val alt_description: Any,
@@ -24,4 +24,4 @@ data class Image(
     val user: User,
     val views: Int,
     val width: Int
-)
+    )

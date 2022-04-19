@@ -1,8 +1,16 @@
 <resources>
+    <!-- application_name -->
     <string name="app_name">Galeria</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <!-- bottom nav bar -->
+    <string name="title_random_image">Random image</string>
+    <string name="title_List_of_Images">List of images</string>
+    <string name="title_favourites">Favourites</string>
+    <!-- ui/dashboard -->
+    <string name="editTextSearch">Search</string>
+        <!--dashboard/image_list.xml-->
+        <string name="imageList">None</string>
+    <!-- ui/home -->
     <string name="RandomImageDescription">RandomImage</string>
     <string name="btnRandImage">Generate image</string>
+    <!-- ui/notifications -->
 </resources>

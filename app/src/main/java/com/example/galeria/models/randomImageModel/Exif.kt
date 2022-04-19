@@ -1,4 +1,4 @@
-package com.example.galeria.models.RandomImageModel
+package com.example.galeria.models.randomImageModel
 
 data class Exif(
     val aperture: String,
