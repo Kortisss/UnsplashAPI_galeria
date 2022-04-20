@@ -1,4 +1,4 @@
-package com.example.galeria.ui.notifications
+package com.example.galeria.ui.dashboard
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,14 +8,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.galeria.R
 import com.example.galeria.databinding.ImageListBinding
-import com.example.galeria.models.randomImageModel.Urls
+import com.example.galeria.models.pageOfImagesModel.Result
 
-class ImageUrlsAdapter : ListAdapter<Urls, ImageUrlsAdapter.ImageViewHolder>(DiffCallback()) {
-
+class ImagesPageAdapter: ListAdapter<Result,ImagesPageAdapter.ImageViewHolder>(DiffCallback()) {
     class ImageViewHolder(private val binding: ImageListBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bind(urls: Urls){
+        fun bind(result: Result){
             binding.apply {
-                Glide.with(binding.root).load(urls.regular).fitCenter().placeholder(R.drawable.ic_baseline_favorite_24).into(binding.singleImage)
+                Glide.with(binding.root).load(result.urls.regular).fitCenter().placeholder(R.drawable.ic_baseline_favorite_24).into(binding.singleImage)
             }
         }
     }
@@ -28,11 +27,11 @@ class ImageUrlsAdapter : ListAdapter<Urls, ImageUrlsAdapter.ImageViewHolder>(Dif
         val currentItem = getItem(position)
         holder.bind(currentItem)
     }
-    class DiffCallback:DiffUtil.ItemCallback<Urls>(){
-        override fun areItemsTheSame(oldItem: Urls, newItem: Urls) =
-            oldItem.likedImageId == newItem.likedImageId
+    class DiffCallback: DiffUtil.ItemCallback<Result>(){
+        override fun areItemsTheSame(oldItem: Result, newItem: Result) =
+            oldItem.id == newItem.id
 
-        override fun areContentsTheSame(oldItem: Urls, newItem: Urls) =
+        override fun areContentsTheSame(oldItem: Result, newItem: Result) =
             oldItem == newItem
     }
 }

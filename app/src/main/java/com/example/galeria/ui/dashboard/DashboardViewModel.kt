@@ -1,12 +1,11 @@
 package com.example.galeria.ui.dashboard
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import com.example.galeria.data.StoreImageUrlsDao
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
+import com.example.galeria.models.pageOfImagesModel.Result
 
 
 class DashboardViewModel : ViewModel() {
+    var image = MutableLiveData<List<Result>>()
 
 }

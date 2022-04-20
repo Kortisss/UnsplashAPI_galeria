@@ -38,7 +38,7 @@ class NotificationsFragment : Fragment() {
             recyclerViewImages.apply {
                 adapter = imageAdapter
                 layoutManager = LinearLayoutManager(requireContext())
-                setHasFixedSize(false)
+                setHasFixedSize(true)
             }
         }
         notificationsViewModel.image.observe(viewLifecycleOwner){
