@@ -5,15 +5,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.galeria.R
 import com.example.galeria.databinding.FragmentDashboardBinding
 import com.example.galeria.models.pageOfImagesModel.PageModel
+import com.example.galeria.models.pageOfImagesModel.Result
+import com.example.galeria.ui.home.ImageLongClickDialogFragment
 import com.example.galeria.ui.home.RetrofitInstance
 import com.example.galeria.ui.home.TAG
 import retrofit2.HttpException
@@ -55,16 +57,22 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
                 Log.e(TAG, "Response not successful")
                 Log.e(TAG, response.toString())
             }
+            
+            val imageAdapter = ImagesPageAdapter(ImagesPageAdapter.OnClickListener{click ->
+                ImageClickDialogFragment(click).show(childFragmentManager, ImageLongClickDialogFragment.TAG)
+            })
+            binding.apply {
+                recyclerViewImagesDashboard.apply {
+                    adapter = imageAdapter
+                    layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+                }
 
-            val imageAdapter = ImagesPageAdapter()
-            binding.apply { recyclerViewImagesDashboard.apply {
-                adapter = imageAdapter
-                layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-            } }
+            }
             dashboardViewModel.image.observe(viewLifecycleOwner){
                 imageAdapter.submitList(it)
             }
         }
+
         return binding.root
     }
 

@@ -1,4 +1,4 @@
-package com.example.galeria.ui.home
+package com.example.galeria.ui.dashboard
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -6,12 +6,11 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
-import com.example.galeria.models.randomImageModel.Image
+import com.example.galeria.models.pageOfImagesModel.Result
 
-
-class ImageLongClickDialogFragment(obj: Image): DialogFragment() {
+class ImageClickDialogFragment(obj: Result): DialogFragment() {
     private val items = arrayOf<CharSequence>("Add to favourite", "View Online", "Image info")
-    private val myClass: Image = obj
+    private val myClass: Result = obj
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
             val builder = AlertDialog.Builder(it)
@@ -34,6 +33,6 @@ class ImageLongClickDialogFragment(obj: Image): DialogFragment() {
         } ?: throw IllegalStateException("Activity cannot be null")
     }
     companion object {
-        const val TAG = "HomeFragment_Image_LongClick"
+        const val TAG = "DashboardFragment_ImageClick"
     }
 }
