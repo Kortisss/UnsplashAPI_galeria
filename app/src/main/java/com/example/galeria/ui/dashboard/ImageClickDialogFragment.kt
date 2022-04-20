@@ -7,7 +7,9 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.example.galeria.models.pageOfImagesModel.Result
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ImageClickDialogFragment(obj: Result): DialogFragment() {
     private val items = arrayOf<CharSequence>("Add to favourite", "View Online", "Image info")
     private val myClass: Result = obj

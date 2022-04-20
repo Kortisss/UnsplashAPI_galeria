@@ -18,9 +18,10 @@ import com.example.galeria.models.pageOfImagesModel.Result
 import com.example.galeria.ui.home.ImageLongClickDialogFragment
 import com.example.galeria.ui.home.RetrofitInstance
 import com.example.galeria.ui.home.TAG
+import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.HttpException
 import java.io.IOException
-
+@AndroidEntryPoint
 class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
     private val dashboardViewModel: DashboardViewModel by viewModels()
     private var _binding: FragmentDashboardBinding? = null

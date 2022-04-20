@@ -16,9 +16,11 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.galeria.databinding.FragmentHomeBinding
 import com.example.galeria.models.randomImageModel.Image
+import com.example.galeria.models.randomImageModel.Urls
 import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.HttpException
 import java.io.IOException
+import java.net.URLStreamHandler
 
 const val TAG = "HomeFragment"
 @AndroidEntryPoint
@@ -51,8 +53,8 @@ class HomeFragment : Fragment() {
         binding.imageToLoad.setOnLongClickListener{
             Toast.makeText(it.context, "Long click detected", Toast.LENGTH_SHORT).show()
             vibratePhone()
-            homeViewModel.getObj().value?.let { it1 ->
-                ImageLongClickDialogFragment(it1).show(
+            homeViewModel.getObj().value?.let { obj ->
+                ImageLongClickDialogFragment(obj,homeViewModel).show(
                     childFragmentManager, ImageLongClickDialogFragment.TAG)
             }
             registerForContextMenu(binding.imageToLoad)
