@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.galeria.R
 import com.example.galeria.databinding.FragmentDashboardBinding
@@ -26,21 +27,9 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
 
-        val imageAdapter = ImageUrlsAdapter()
-        binding.apply {
-            recyclerViewImages.apply {
-                adapter = imageAdapter
-                layoutManager = LinearLayoutManager(requireContext())
-                setHasFixedSize(true)
-            }
-        }
-        dashboardViewModel.image.observe(viewLifecycleOwner){
-            imageAdapter.submitList(it)
-        }
+        //code here
 
         return binding.root
     }

@@ -6,9 +6,7 @@ import com.example.galeria.data.StoreImageUrlsDao
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
-@HiltViewModel
-class DashboardViewModel @Inject constructor(
-    imageDao: StoreImageUrlsDao
-) : ViewModel() {
-    val image = imageDao.getImages().asLiveData()
+
+class DashboardViewModel : ViewModel() {
+
 }

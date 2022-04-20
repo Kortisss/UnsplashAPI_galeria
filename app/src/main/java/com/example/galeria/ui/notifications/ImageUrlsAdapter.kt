@@ -1,4 +1,4 @@
-package com.example.galeria.ui.dashboard
+package com.example.galeria.ui.notifications
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,10 +6,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.TransformationUtils.fitCenter
 import com.example.galeria.R
-import com.example.galeria.models.randomImageModel.Urls
 import com.example.galeria.databinding.ImageListBinding
+import com.example.galeria.models.randomImageModel.Urls
 
 class ImageUrlsAdapter : ListAdapter<Urls, ImageUrlsAdapter.ImageViewHolder>(DiffCallback()) {
 
@@ -20,7 +19,6 @@ class ImageUrlsAdapter : ListAdapter<Urls, ImageUrlsAdapter.ImageViewHolder>(Dif
             }
         }
     }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
         val binding = ImageListBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return ImageViewHolder(binding)
