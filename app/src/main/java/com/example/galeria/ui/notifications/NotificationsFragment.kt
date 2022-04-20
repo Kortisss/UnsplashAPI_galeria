@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.galeria.databinding.FragmentNotificationsBinding
 import com.example.galeria.ui.dashboard.DashboardViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,8 +38,8 @@ class NotificationsFragment : Fragment() {
         binding.apply {
             recyclerViewImages.apply {
                 adapter = imageAdapter
-                layoutManager = LinearLayoutManager(requireContext())
-                setHasFixedSize(true)
+                layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+
             }
         }
         notificationsViewModel.image.observe(viewLifecycleOwner){

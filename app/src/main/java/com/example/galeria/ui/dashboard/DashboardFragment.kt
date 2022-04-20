@@ -48,7 +48,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
             }
             if (response.isSuccessful && response.body() != null){
                 val listOfImages: PageModel = response.body()!!
-                listOfImages.results[0].urls.regular
+                //listOfImages.results[0].urls.regular
                 dashboardViewModel.image.value = listOfImages.results
 
             } else {
@@ -60,7 +60,6 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
             binding.apply { recyclerViewImagesDashboard.apply {
                 adapter = imageAdapter
                 layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-                setHasFixedSize(true)
             } }
             dashboardViewModel.image.observe(viewLifecycleOwner){
                 imageAdapter.submitList(it)

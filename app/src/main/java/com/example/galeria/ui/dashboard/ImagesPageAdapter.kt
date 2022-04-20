@@ -14,7 +14,7 @@ class ImagesPageAdapter: ListAdapter<Result,ImagesPageAdapter.ImageViewHolder>(D
     class ImageViewHolder(private val binding: ImageListBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(result: Result){
             binding.apply {
-                Glide.with(binding.root).load(result.urls.regular).fitCenter().placeholder(R.drawable.ic_baseline_favorite_24).into(binding.singleImage)
+                Glide.with(binding.root).load(result.urls.regular).centerInside().placeholder(R.drawable.ic_baseline_favorite_24).into(binding.singleImage)
             }
         }
     }

@@ -15,7 +15,7 @@ class ImageUrlsAdapter : ListAdapter<Urls, ImageUrlsAdapter.ImageViewHolder>(Dif
     class ImageViewHolder(private val binding: ImageListBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(urls: Urls){
             binding.apply {
-                Glide.with(binding.root).load(urls.regular).fitCenter().placeholder(R.drawable.ic_baseline_favorite_24).into(binding.singleImage)
+                Glide.with(binding.root).load(urls.regular).centerInside().placeholder(R.drawable.ic_baseline_favorite_24).into(binding.singleImage)
             }
         }
     }
