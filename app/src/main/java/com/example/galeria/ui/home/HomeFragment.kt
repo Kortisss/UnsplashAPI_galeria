@@ -61,7 +61,7 @@ class HomeFragment : Fragment() {
                 binding.progressBar.isVisible = true
                 binding.imageToLoad.visibility = View.VISIBLE
                 val response = try {
-                    RetrofitInstance.API.getRandomImage(clientId)
+                    RetrofitInstance.API.getRandomImage(clientId,"portrait")
                 } catch (e: IOException) {
                     Log.e(TAG, "IOException, you might not have internet connection")
                     binding.progressBar.isVisible = false
@@ -78,7 +78,7 @@ class HomeFragment : Fragment() {
                     Glide
                         .with(requireContext())
                         .load(myClass.urls.regular)
-                        .centerCrop()
+                        .centerInside()
                         .into(binding.imageToLoad)
                 } else {
                     Log.e(TAG, "Response not successful")

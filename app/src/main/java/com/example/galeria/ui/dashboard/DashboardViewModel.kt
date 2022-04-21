@@ -17,4 +17,10 @@ class DashboardViewModel @Inject constructor(
     suspend fun postImageToDatabase(urls: Urls){
         return imageDao.insert(urls)
     }
+
+    var queryString = MutableLiveData<String>()
+    var queryColorOption = MutableLiveData<String>().apply { postValue("white")}
+    var queryOrderByOption = MutableLiveData<String>().apply { postValue("relevant")}
+
+
 }

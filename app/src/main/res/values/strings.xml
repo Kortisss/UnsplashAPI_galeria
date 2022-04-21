@@ -7,6 +7,9 @@
     <string name="title_favourites">Favourites</string>
     <!-- ui/dashboard -->
     <string name="editTextSearch">Search</string>
+    <string name="dropdownImageOptionsDesc">Dropdown</string>
+    <string name="labelHintColorOptions">Color</string>
+    <string name="labelHintOrderOptions">Order by</string>
         <!--dashboard/image_list.xml-->
         <string name="imageList">None</string>
     <!-- ui/home -->

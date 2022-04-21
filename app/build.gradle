@@ -78,9 +78,7 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$daggerVersion"
     annotationProcessor "com.google.dagger:hilt-compiler:$daggerVersion"
     kapt "com.google.dagger:hilt-android-compiler:$daggerVersion"
-
     kapt "androidx.hilt:hilt-compiler:$hiltAndroidXVersion"
-
 
     //fragment
     implementation 'androidx.navigation:navigation-fragment-ktx:2.4.2'
@@ -102,6 +100,11 @@ dependencies {
 
     // recycler view
     implementation "androidx.recyclerview:recyclerview:1.2.1"
+
+    //cardview
+    implementation("androidx.cardview:cardview:1.0.0")
+
+
 }
 
 
