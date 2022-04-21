@@ -10,7 +10,7 @@ import com.example.galeria.R
 import com.example.galeria.databinding.ImageListBinding
 import com.example.galeria.models.randomImageModel.Urls
 
-class ImageUrlsAdapter : ListAdapter<Urls, ImageUrlsAdapter.ImageViewHolder>(DiffCallback()) {
+class ImageUrlsAdapter(private val onClickListener: OnClickListener) : ListAdapter<Urls, ImageUrlsAdapter.ImageViewHolder>(DiffCallback()) {
 
     class ImageViewHolder(private val binding: ImageListBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(urls: Urls){
@@ -26,6 +26,7 @@ class ImageUrlsAdapter : ListAdapter<Urls, ImageUrlsAdapter.ImageViewHolder>(Dif
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
         val currentItem = getItem(position)
+        holder.itemView.setOnClickListener{onClickListener.onClick(currentItem)}
         holder.bind(currentItem)
     }
     class DiffCallback:DiffUtil.ItemCallback<Urls>(){
@@ -34,5 +35,8 @@ class ImageUrlsAdapter : ListAdapter<Urls, ImageUrlsAdapter.ImageViewHolder>(Dif
 
         override fun areContentsTheSame(oldItem: Urls, newItem: Urls) =
             oldItem == newItem
+    }
+    class OnClickListener(val clickListener: (urls: Urls) -> Unit) {
+        fun onClick(urls: Urls) = clickListener(urls)
     }
 }

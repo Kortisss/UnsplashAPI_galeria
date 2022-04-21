@@ -11,7 +11,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ImageClickDialogFragment(obj: Result): DialogFragment() {
-    private val items = arrayOf<CharSequence>("Add to favourite", "View Online", "Image info")
+    private val items = arrayOf<CharSequence>("Add to favourite", "View Online")
     private val myClass: Result = obj
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
@@ -25,9 +25,6 @@ class ImageClickDialogFragment(obj: Result): DialogFragment() {
                             val browserIntent =
                                 Intent(Intent.ACTION_VIEW, Uri.parse(myClass.links.html))
                             startActivity(browserIntent)
-                        }
-                        2 -> {
-                            print("x == 2")
                         }
                     }
                 }

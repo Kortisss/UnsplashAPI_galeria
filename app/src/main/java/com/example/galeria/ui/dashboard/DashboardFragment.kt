@@ -51,16 +51,15 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
             }
             if (response.isSuccessful && response.body() != null){
                 val listOfImages: PageModel = response.body()!!
-                //listOfImages.results[0].urls.regular
                 dashboardViewModel.image.value = listOfImages.results
-
             } else {
                 Log.e(TAG, "Response not successful")
                 Log.e(TAG, response.toString())
             }
-            
+
+            //onClick function for items in adapter
             val imageAdapter = ImagesPageAdapter(ImagesPageAdapter.OnClickListener{click ->
-                ImageClickDialogFragment(click).show(childFragmentManager, ImageLongClickDialogFragment.TAG)
+                ImageClickDialogFragment(click).show(childFragmentManager, ImageClickDialogFragment.TAG)
             })
             binding.apply {
                 recyclerViewImagesDashboard.apply {

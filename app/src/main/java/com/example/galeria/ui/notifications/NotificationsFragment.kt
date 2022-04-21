@@ -12,17 +12,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.galeria.databinding.FragmentNotificationsBinding
 import com.example.galeria.ui.dashboard.DashboardViewModel
+import com.example.galeria.ui.dashboard.ImageClickDialogFragment
+import com.example.galeria.ui.dashboard.ImagesPageAdapter
+import com.example.galeria.ui.home.ImageLongClickDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class NotificationsFragment : Fragment() {
 
     private var _binding: FragmentNotificationsBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
-    private val notificationsViewModel: NotificationsViewModel by viewModels()
+
+    //private val notificationsViewModel: NotificationsViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -34,7 +35,9 @@ class NotificationsFragment : Fragment() {
         _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val imageAdapter = ImageUrlsAdapter()
+        val imageAdapter = ImageUrlsAdapter(ImageUrlsAdapter.OnClickListener{ click ->
+            ImageClickDialogFragmentNotifications(click,notificationsViewModel).show(childFragmentManager, ImageLongClickDialogFragment.TAG)
+        })
         binding.apply {
             recyclerViewImages.apply {
                 adapter = imageAdapter
@@ -45,6 +48,9 @@ class NotificationsFragment : Fragment() {
         notificationsViewModel.image.observe(viewLifecycleOwner){
             imageAdapter.submitList(it)
         }
+
+
+
         return root
     }
 
