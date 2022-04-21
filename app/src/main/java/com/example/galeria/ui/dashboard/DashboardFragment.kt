@@ -59,7 +59,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 
             //onClick function for items in adapter
             val imageAdapter = ImagesPageAdapter(ImagesPageAdapter.OnClickListener{click ->
-                ImageClickDialogFragment(click).show(childFragmentManager, ImageClickDialogFragment.TAG)
+                ImageClickDialogFragment(click,dashboardViewModel).show(childFragmentManager, ImageClickDialogFragment.TAG)
             })
             binding.apply {
                 recyclerViewImagesDashboard.apply {
