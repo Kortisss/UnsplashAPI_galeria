@@ -3,8 +3,6 @@ package com.example.galeria.ui.dashboard
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,25 +13,23 @@ import android.widget.AutoCompleteTextView
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.galeria.R
 import com.example.galeria.databinding.FragmentDashboardBinding
-import com.example.galeria.models.pageOfImagesModel.PageModel
-import com.example.galeria.ui.home.RetrofitInstance
-import com.example.galeria.ui.home.TAG
 import dagger.hilt.android.AndroidEntryPoint
-import retrofit2.HttpException
-import java.io.IOException
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flow
+
 
 
 @AndroidEntryPoint
 class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
-
+    private val TAG = "DashboardFragment"
     private val dashboardViewModel: DashboardViewModel by viewModels()
     private var _binding: FragmentDashboardBinding? = null
     private val binding get() = _binding!!
-    private val clientId = "zxQxVwX0NyRLHKKXGXyNiXIQzY0Q2iT6esxgxi2MJOo"
+    //todo: zaszyfrować klusz clientId
     override fun onResume() {
         super.onResume()
 
@@ -46,7 +42,9 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         (binding.orderByList as? AutoCompleteTextView)?.setAdapter(adapterOrderBy)
 
 
-        returnImages()
+        if(!dashboardViewModel.queryString.value.isNullOrEmpty()){
+            dashboardViewModel.returnImages()
+        }
     }
 
     override fun onCreateView(
@@ -57,22 +55,27 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         var isDown = false
-        //list of items for query color selection
 
+        dashboardViewModel.loading.observe(viewLifecycleOwner){
+            if (dashboardViewModel.loading.value == true){
+                binding.progresBarDashboard.visibility=View.VISIBLE
+            }else{
+                binding.progresBarDashboard.visibility=View.INVISIBLE
+            }
+        }
 
-        binding.orderByList.setOnItemClickListener { parent: AdapterView<*>?, view: View?, position: Int, id: Long ->
+        binding.orderByList.setOnItemClickListener { parent: AdapterView<*>?, _: View?, position: Int, _: Long ->
             dashboardViewModel.queryOrderByOption.value = parent?.getItemAtPosition(position).toString()
-            returnImages()
+            dashboardViewModel.returnImages()
         }
-        binding.colorsList.setOnItemClickListener { parent: AdapterView<*>?, view: View?, position: Int, id: Long ->
+        binding.colorsList.setOnItemClickListener { parent: AdapterView<*>?, _: View?, position: Int, _: Long ->
             dashboardViewModel.queryColorOption.value = parent?.getItemAtPosition(position).toString()
-            returnImages()
+            dashboardViewModel.returnImages()
         }
-
         binding.searchViewDashboard.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(p0: String?): Boolean {
                 dashboardViewModel.queryString.value = p0
-                returnImages()
+                dashboardViewModel.returnImages()
                 return true
             }
 
@@ -82,10 +85,33 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 
         })
 
-        //dashboardViewModel.queryString.value = binding.searchViewDashboard.query.toString()
-        //returnImages()
-        //code here
-
+        //onClick function for items in adapter
+        val imageAdapter = ImagesPageAdapter(ImagesPageAdapter.OnClickListener{click ->
+            ImageClickDialogFragment(click,dashboardViewModel).show(childFragmentManager, ImageClickDialogFragment.TAG)
+        })
+        binding.apply {
+            recyclerViewImagesDashboard.apply {
+                adapter = imageAdapter
+                layoutManager =
+                    StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+                this.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                        super.onScrolled(recyclerView, dx, dy)
+                        if (!recyclerView.canScrollVertically(1) && dy > 0)
+                        {
+                            dashboardViewModel.nextPage()
+                        }else if (!recyclerView.canScrollVertically(-1) && dy < 0)
+                        {
+                            //scrolled to TOP
+                            Log.d("-----", "top")
+                        }
+                    }
+                })
+            }
+        }
+        dashboardViewModel.image.observe(viewLifecycleOwner){
+            imageAdapter.submitList(it)
+        }
         binding.imageArrow.setOnClickListener{
             fun menuDown(){
                 binding.menuColor.visibility = View.VISIBLE
@@ -112,48 +138,9 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
                 menuUp()
             }
         }
-
         return binding.root
     }
 
-    private fun returnImages(){
-        lifecycleScope.launchWhenCreated {
-            val response = try {
-                RetrofitInstance.API.getListOfImages(clientId,
-                    dashboardViewModel.queryString.value.toString(),
-                    dashboardViewModel.queryOrderByOption.value.toString(),
-                    dashboardViewModel.queryColorOption.value.toString())//todo: Wykorzystałem limit requestów na godzine :D nie pobierami obrazow
-            } catch (e: IOException) {
-                Log.e(TAG, "IOException, you might not have internet connection")
-                return@launchWhenCreated
-            } catch (e: HttpException) {
-                Log.e(TAG, "HttpException, unexpected response")
-                return@launchWhenCreated
-            }
-            if (response.isSuccessful && response.body() != null){
-                val listOfImages: PageModel = response.body()!!
-                dashboardViewModel.image.value = listOfImages.results
-            } else {
-                Log.e(TAG, "Response not successful")
-                Log.e(TAG, response.toString())
-            }
-
-            //onClick function for items in adapter
-            val imageAdapter = ImagesPageAdapter(ImagesPageAdapter.OnClickListener{click ->
-                ImageClickDialogFragment(click,dashboardViewModel).show(childFragmentManager, ImageClickDialogFragment.TAG)
-            })
-            binding.apply {
-                recyclerViewImagesDashboard.apply {
-                    adapter = imageAdapter
-                    layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-                }
-
-            }
-            dashboardViewModel.image.observe(viewLifecycleOwner){
-                imageAdapter.submitList(it)
-            }
-        }
-    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
