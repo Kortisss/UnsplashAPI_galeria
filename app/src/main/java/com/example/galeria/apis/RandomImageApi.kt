@@ -11,5 +11,5 @@ interface RandomImageApi {
     suspend fun getRandomImage(@Query("client_id") client_id: String, @Query("orientation") orientation: String): Response<Image>
 
     @GET("/search/photos/")
-    suspend fun getListOfImages(@Query("client_id") client_id: String, @Query("page") page: String, @Query("query") query: String, @Query("order_by") order_by: String, @Query("color") color: String): Response<PageModel>
+    suspend fun getListOfImages(@Query("client_id") client_id: String, @Query("page") page: String, @Query("query") query: String, @Query("order_by") order_by: String): Response<PageModel>
 }

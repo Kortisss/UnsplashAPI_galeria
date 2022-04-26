@@ -21,6 +21,7 @@ class DashboardViewModel @Inject constructor(
     private val imageDao: StoreImageUrlsDao
 ) : ViewModel(){
     var image = MutableLiveData<List<Result>>()
+    private val page_size = 10
     private var page = MutableLiveData<Int>().apply { value = 1 }
     var loading = MutableLiveData<Boolean>().apply { postValue(false)}
     var queryString = MutableLiveData<String>()
@@ -34,8 +35,7 @@ class DashboardViewModel @Inject constructor(
                 clientId,
                 page.value.toString(),
                 queryString.value.toString(),
-                queryOrderByOption.value.toString(),
-                queryColorOption.value.toString())
+                queryOrderByOption.value.toString())
 
             val listOfImages: PageModel = a.body()!!
             image.value = listOfImages.results
@@ -45,15 +45,16 @@ class DashboardViewModel @Inject constructor(
     }
     fun nextPage(){
         viewModelScope.launch {
-            val query = let{queryString.value.toString()}
-            val colorOption = let{queryColorOption.value.toString()}
-            val orderByOption = let{queryOrderByOption.value.toString()}
+            //if (){
+
+            //}
             loading.value = true
             incrementPage()
             Log.d(TAG, "nextPage: triggered: ${page.value}")
             delay(1000)
             if (page.value!! > 1){
-                val result = RetrofitInstance.API.getListOfImages(clientId,page.value.toString(),query,orderByOption,colorOption)
+                //todo: dodać zabezpieczenie przed nadmiernym wyzyłaniem żądania
+                val result = RetrofitInstance.API.getListOfImages(clientId,page.value.toString(),queryString.value.toString(),queryOrderByOption.value.toString())
                 Log.d(TAG, "search: appending")
                 result.body()?.let { appendImages(it.results) }
             }

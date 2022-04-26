@@ -33,9 +33,6 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
     override fun onResume() {
         super.onResume()
 
-        val itemsColor = listOf("white", "black_and_white", "black", "yellow", "orange", "red", "magenta", "green", "teal", "blue")
-        val adapterColor = ArrayAdapter(requireContext(), R.layout.filter_option_list_item, itemsColor)
-        (binding.colorsList as? AutoCompleteTextView)?.setAdapter(adapterColor)
 
         val itemsOrderBy = listOf("latest", "relevant")
         val adapterOrderBy = ArrayAdapter(requireContext(), R.layout.filter_option_list_item, itemsOrderBy)
@@ -97,10 +94,10 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
                 this.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                         super.onScrolled(recyclerView, dx, dy)
-                        if (!recyclerView.canScrollVertically(1) && dy > 0)
+                        if (!recyclerView.canScrollVertically(1) && dy > 0 && !dashboardViewModel.loading.value!!)
                         {
                             dashboardViewModel.nextPage()
-                        }else if (!recyclerView.canScrollVertically(-1) && dy < 0)
+                        }else if (!recyclerView.canScrollVertically(-1) && dy < 0 )
                         {
                             //scrolled to TOP
                             Log.d("-----", "top")
