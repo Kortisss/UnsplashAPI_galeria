@@ -63,14 +63,17 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 
         binding.orderByList.setOnItemClickListener { parent: AdapterView<*>?, _: View?, position: Int, _: Long ->
             dashboardViewModel.queryOrderByOption.value = parent?.getItemAtPosition(position).toString()
+            dashboardViewModel.resetPagination()
             dashboardViewModel.returnImages()
         }
-        binding.colorsList.setOnItemClickListener { parent: AdapterView<*>?, _: View?, position: Int, _: Long ->
+        /*binding.colorsList.setOnItemClickListener { parent: AdapterView<*>?, _: View?, position: Int, _: Long ->
             dashboardViewModel.queryColorOption.value = parent?.getItemAtPosition(position).toString()
+            dashboardViewModel.resetPagination()
             dashboardViewModel.returnImages()
-        }
+        }*/
         binding.searchViewDashboard.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(p0: String?): Boolean {
+                dashboardViewModel.resetPagination()
                 dashboardViewModel.queryString.value = p0
                 dashboardViewModel.returnImages()
                 return true

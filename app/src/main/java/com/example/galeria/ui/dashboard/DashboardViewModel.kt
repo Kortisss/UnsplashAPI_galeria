@@ -66,6 +66,9 @@ class DashboardViewModel @Inject constructor(
         current.addAll(images)
         this.image.value = this.image.value?.plus(current)
     }
+    fun resetPagination(){
+        page.value = 1
+    }
     private fun incrementPage(){
         page.value = page.value?.plus(1)
     }
